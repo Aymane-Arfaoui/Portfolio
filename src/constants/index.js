@@ -2,69 +2,191 @@ import project1 from "../assets/projects/project-1.jpg";
 import project2 from "../assets/projects/project-2.jpg";
 import project3 from "../assets/projects/project-3.jpg";
 import project4 from "../assets/projects/project-4.jpg";
+import almentorImage from "../assets/almentor.png";
+import defendlyImage from "../assets/defendly.png";
+import athleticaImage from "../assets/athletica.png";
+import sfhacksImage from "../assets/sfhacks.png";
 
-export const HERO_CONTENT = `My name is Aymane Arfaoui, and I am a third year at Concordia University majoring in Software Engineering. I have previously interned with Pratt & Whitney Canada and Raytheon RTX, where I worked as a Data Analyst and Machine Learning Engineer. In my free time, I work on side projects including a Web-Based University Exchange Platform and an AI Medical Counselor Startup. Please feel free to reach out!`;
+export const HERO_CONTENT = `I'm Aymane Arfaoui, a Software Engineering student at Concordia University passionate about building transformative technology. As a Machine Learning Engineer at Pratt & Whitney, I've developed patented AI models saving millions annually. I'm the creator of Almentor - an AI math explainer that reached 12k users in 3 months, and co-founder of Defendly - an AI-powered traffic ticket defense platform. My work spans from aerospace ML systems to consumer apps that make complex technology accessible to everyone.`;
 
-export const ABOUT_TEXT = `I am a dedicated and versatile full stack developer with a passion for creating efficient and user-friendly web applications. With 5 years of professional experience, I have worked with a variety of technologies, including React, Next.js, Node.js, MySQL, PostgreSQL, and MongoDB. My journey in web development began with a deep curiosity for how things work, and it has evolved into a career where I continuously strive to learn and adapt to new challenges. I thrive in collaborative environments and enjoy solving complex problems to deliver high-quality solutions. Outside of coding, I enjoy staying active, exploring new technologies, and contributing to open-source projects.`;
+export const ABOUT_TEXT = `I am a dedicated Software Engineering student with a strong foundation in machine learning, full-stack development, and systems programming. My experience spans from developing patented ML models at Pratt & Whitney to building scalable ETL workflows at Raytheon Technologies. I'm passionate about creating innovative solutions that bridge the gap between cutting-edge technology and real-world applications. My technical expertise includes Python, JavaScript, React Native, TensorFlow, AWS, and C/C++. I thrive in collaborative environments and enjoy tackling complex problems that require both technical depth and creative thinking.`;
 
 export const EXPERIENCES = [
   {
-    year: "Summer 2024",
-    role: "Machine Learning Engineer and Full Stack Web Developer",
-    company: "Pratt & Whitney Canada",
-    description: `Developed multiple neural network models using Keras and TensorFlow, achieving 93% accuracy in predicting deviations. Learned about activation functions, optimizers, and back propagation. Built a full stack platform to make models and graphs available to the team.`,
-    technologies: ["Python", "Keras", "TensorFlow", "Flask", "MongoDB", "Azure","React.js", "Node.js"],
+    year: "Aug 2024 – Present",
+    role: "Machine Learning Engineer Intern",
+    company: "Pratt & Whitney",
+    location: "Longueuil, QC",
+    description: `Led development of a patented scalable Bayesian Monte Carlo surrogate model that predicts electrode consumption in real time, saving $3M+ annually. Improved WEDM defect-detection accuracy by 20% using BNNs and statistical process optimization. Filed a disclosure for 3D visualization using Dirichlet-to-Neumann maps. Patented architecture to minimize simulation-to-reality discrepancies using domain, physics-guided, and context losses.`,
+    technologies: ["Python", "JavaScript", "React", "Flask", "AWS", "C#", "Jira", "CI/CD"],
+    impact: "$3M+ potential Savings",
+    highlight: "Patent-Pending ML Model"
   },
   {
-    year: "Winter 2024",
-    role: "Data Analyst and Machine Learning Engineer",
-    company: "Pratt & Whitney Canada",
-    description: `Developed advanced machine learning models to optimize turbine production processes. Achieved a remarkable prediction accuracy of key variables up to 96.37%. Utilized Python and its libraries for data analysis and visualization.`,
-    technologies: ["Python", "Matplotlib", "Seaborn", "Pandas", "NumPy"],
+    year: "Jan 2024 – Aug 2024",
+    role: "Software Engineer Intern",
+    company: "Pratt & Whitney",
+    location: "Longueuil, QC",
+    description: `Built and deployed a full-stack app integrated with SAP APIs, reducing manual engine-part data processing by ~23 minutes per employee. Engineered an EDM monitoring system with OPC UA protocol and visualizations using D3.js and Chart.js.`,
+    technologies: ["Python", "TensorFlow", "Scikit-learn", "Pandas", "NumPy"],
+    impact: "23min Saved Per Employee",
+    highlight: "Full-Stack Integration"
   },
   {
-    year: "Fall 2023",
-    role: "Data Analyst and Line Supervisor",
-    company: "Raytheon RTX",
-    description: `Conducted in-depth data analysis to optimize machine manufacturing processes for aircraft engines. Managed a team of over 30 employees, ensuring quality standards. Designed SQL databases to streamline data storage, retrieval, and analysis.`,
-    technologies: ["Python", "SQL" , "Excel", "Power BI", "VBA"],
+    year: "Sep 2023 – Dec 2023",
+    role: "Data Engineer Intern",
+    company: "Raytheon Technologies",
+    location: "Longueuil, QC",
+    description: `Reduced machine downtime by 16% with automated SPC and anomaly detection pipelines. Built scalable ETL workflows and analytics dashboards.`,
+    technologies: ["Python", "PostgreSQL", "Spark", "Pandas", "Matplotlib"],
+    impact: "16% Downtime Reduction",
+    highlight: "Automated Pipelines"
   },
 ];
 
 export const PROJECTS = [
   {
-    title: "Team Lead for a Web-Based University Exchange Platform",
-    image: project2,
-    description:
-    "Led a team of 5 in the design and implementation of a sophisticated web-based platform, integrating cutting-edge technologies to facilitate university exchange programs.",
-    technologies: ["Python", "Flask", "Bootstrap", "Apache", "AWS", "MySQL"],
+    title: "Almentor",
+    type: "AI Math Explainer Desktop App",
+    image: almentorImage,
+    description: "Revolutionary desktop application that transforms screenshots of math problems into beautifully animated video explanations using Manim and AI. Features real-time problem recognition, step-by-step solution generation, and AI-narrated video creation. Reached 12k users in just 3 months with potential of 3M+ dollars in savings for educational institutions.",
+    technologies: ["Electron", "JavaScript", "Python", "Manim", "AWS", "OpenAI API", "Computer Vision"],
+    duration: "May 2025 – Present",
+    metrics: "12k Users in 3 Months",
+    website: "https://almentor.co",
+    github: "https://github.com/Aymane-Arfaoui/Almentor",
+    featured: true
   },
   {
-    title: "AI Medical Counselor Startup",
-    image: project1,
-    description:
-      "Founded a non-profit startup promoting medical counseling through an AI-trained model in collaboration with McGill. Worked with a team of doctors to revolutionize medical counseling through AI and SFBT therapy.",
-    technologies: ["JavaScript", "React", "Java", "Python"],
+    title: "Defendly AI",
+    type: "AI-Powered Legal Defense Platform",
+    image: defendlyImage,
+    description: "Intelligent traffic ticket defense platform that analyzes tickets for legal errors, jurisdictional issues, and defense opportunities. Built with advanced AI models trained on millions of legal cases, helping users save thousands on fines while protecting insurance rates. Features global coverage across 13+ regions.",
+    technologies: ["React", "Next.js", "Python", "TensorFlow", "AWS", "Stripe", "Legal APIs"],
+    duration: "2024 – Present",
+    metrics: "93% Success Rate",
+    website: "https://defendly.vercel.app",
+    github: "https://github.com/Aymane-Arfaoui/Defendly",
+    featured: true
   },
   {
-    title: "Full File System",
-    image: project3,
-    description:
-      "Developed a full file system in C as part of a team of five, handling various file operations and ensuring system robustness.",
-    technologies: ["C", "Linux"],
+    title: "Athletica+",
+    type: "iOS App",
+    image: athleticaImage,
+    description: "A comprehensive fitness companion app designed for iPad and iPhone that combines personalized workout plans, smart tracking, and intuitive progress insights. Features real-time progress tracking, goal-based programs, and a seamless user experience to help users unlock their full potential.",
+    technologies: ["React Native (Expo)", "iOS", "TestFlight", "Health & Fitness"],
+    duration: "2025 – Present",
+    metrics: "Live on App Store",
+    appStore: "https://apps.apple.com/us/app/athletica/id6748931550",
+    github: "https://github.com/Aymane-Arfaoui/Athletica",
+    featured: false
   },
   {
-    title: "Full Stack App for Pratt & Whitney",
+    title: "Crowdsourcing Safety App",
+    type: "Web App",
+    image: sfhacksImage,
+    description: "Mapped dangerous zones and enabled one-tap emergency calls to improve safety for women. Won Google Cloud Prize at SF Hacks 2024.",
+    technologies: ["JavaScript", "React", "TypeScript", "Google Maps API"],
+    duration: "Apr 2024",
+    award: "Google Cloud Prize Winner",
+    featured: false
+  },
+  {
+    title: "Unix-Like File System",
+    type: "Systems Project",
     image: project4,
-    description:
-      "Developed a full stack application for the WEDM development team at Pratt & Whitney, featuring data visualizations using the D3 library and a model prediction algorithm on the platform.",
-    technologies: ["JavaScript", "React", "Node.js", "D3.js", "Python"],
+    description: "Built a file system from scratch in C supporting directory hierarchy, contiguous allocation, dynamic file growth, and standard operations.",
+    technologies: ["C"],
+    duration: "Jan 2024 – Apr 2024",
+    featured: false
   },
+];
+
+export const SKILLS = {
+  programming_languages: ["Python", "JavaScript", "C", "C++", "Java", "SQL"],
+  mobile: ["React Native (Expo)", "iOS", "Xcode", "App Store Connect", "TestFlight"],
+  tools_and_technologies: [
+    "TensorFlow", "Scikit-learn", "AWS", "SageMaker", "Azure", "Electron", "Supabase",
+    "Flask", "Django", "Docker", "Git", "Jenkins", "Kubernetes", "Jira", "Spark",
+    "PostgreSQL", "MySQL", "MongoDB"
+  ],
+  foundations: ["Data Structures & Algorithms", "Operating Systems", "Databases", "Networking"]
+};
+
+export const EDUCATION = {
+  institution: "Concordia University",
+  location: "Montréal, QC",
+  degree: "B.Eng. Software Engineering",
+  duration: "Sept 2022 – May 2026",
+  exchange: {
+    institution: "San Francisco State University",
+    gpa: "3.7"
+  }
+};
+
+export const PATENTS_AND_RESEARCH = [
+  {
+    title: "Scalable Bayesian Monte Carlo for Aerospace EDM",
+    status: "Patent-Pending",
+    description: "Surrogate-model–driven framework predicting electrode consumption using UTM-based depth sensing. Saves millions annually.",
+    impact: "$3M+ potential Savings"
+  },
+  {
+    title: "Reality-Gap Analysis for Digital Twins",
+    status: "Patent-Pending",
+    description: "Minimizes sim-to-reality discrepancies using domain, physics-guided, and context losses. Includes Lagrangian-based error detection.",
+    impact: "20% Accuracy Improvement"
+  },
+  {
+    title: "Advanced 3D Visualization using Dirichlet-to-Neumann Maps",
+    status: "Patent-Pending",
+    description: "Novel approach to 3D visualization techniques for complex mathematical models and simulations.",
+    impact: "Enhanced Visualization"
+  },
+  {
+    title: "Automated Anomaly Detection Pipeline",
+    status: "Patent-Pending",
+    description: "Machine learning-based system for real-time anomaly detection in manufacturing processes.",
+    impact: "16% Downtime Reduction"
+  }
+];
+
+export const EXTRACURRICULARS = [
+  {
+    role: "VP Sponsorship",
+    organization: "Engineering & Computer Science Association (ECA), Concordia",
+    description: "Secured sponsorships for hackathons and student tech initiatives by forging corporate partnerships."
+  }
 ];
 
 export const CONTACT = {
   currentCity: "Montreal, Quebec",
-  phoneNo: "514-632-8622",
+  phoneNo: "+1 (514) 632-8622",
   email: "arfaouiaymane@hotmail.com",
+  linkedin: "https://www.linkedin.com/in/aymanearfaoui",
+  github: "https://github.com/Aymane-Arfaoui"
 };
+
+export const ACHIEVEMENTS = [
+  {
+    number: "12k",
+    label: "Almentor Users",
+    description: "In 3 months"
+  },
+  {
+    number: "$3M+",
+    label: "potential Savings",
+    description: "From ML Models"
+  },
+  {
+    number: "93%",
+    label: "Success Rate",
+    description: "Defendly Platform"
+  },
+  {
+    number: "4",
+    label: "Patents Pending",
+    description: "AI Innovations"
+  }
+];
 
