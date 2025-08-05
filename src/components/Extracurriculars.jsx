@@ -1,7 +1,7 @@
 import React from 'react';
 import { EXTRACURRICULARS } from '../constants';
 import { motion } from 'framer-motion';
-import { UserGroupIcon, HandshakeIcon, TrophyIcon } from '@heroicons/react/24/outline';
+import { UserGroupIcon, BuildingOfficeIcon, TrophyIcon } from '@heroicons/react/24/outline';
 import { SparklesIcon } from '@heroicons/react/24/solid';
 
 const Extracurriculars = () => {
@@ -94,7 +94,7 @@ const Extracurriculars = () => {
                 {/* Impact Highlights */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-center gap-3 p-4 glass rounded-xl">
-                    <HandshakeIcon className="w-6 h-6 text-blue-600" />
+                    <BuildingOfficeIcon className="w-6 h-6 text-blue-600" />
                     <div>
                       <div className="text-sm font-semibold text-slate-900">Corporate Partnerships</div>
                       <div className="text-xs text-slate-600">Strategic Alliances</div>
@@ -142,7 +142,7 @@ const Extracurriculars = () => {
             
             <div className="text-center">
               <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <HandshakeIcon className="w-6 h-6 text-white" />
+                <BuildingOfficeIcon className="w-6 h-6 text-white" />
               </div>
               <h4 className="font-semibold text-slate-900 mb-2">Strategic Partnerships</h4>
               <p className="text-sm text-slate-600">Securing resources and opportunities for student success</p>
