@@ -1,153 +1,85 @@
 import React from 'react';
-import { EDUCATION } from '../constants';
 import { motion } from 'framer-motion';
-import { AcademicCapIcon, MapPinIcon, CalendarIcon, StarIcon } from '@heroicons/react/24/outline';
-import { BuildingLibraryIcon } from '@heroicons/react/24/solid';
+import { EDUCATION } from '../constants';
+
+const fadeUp = {
+  hidden: { y: 30, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
+};
+
+const stagger = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+};
+
+function EducationCard({ edu }) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      whileHover={{ scale: 1.02, borderColor: 'rgba(6,182,212,0.2)' }}
+      className={`glass-dark rounded-2xl p-8 border border-white/5 transition-colors relative overflow-hidden ${
+        edu.highlight ? 'gradient-border' : ''
+      }`}
+    >
+      {edu.highlight && (
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600" />
+      )}
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+        <div>
+          <h3 className="text-lg font-bold text-slate-100">{edu.institution}</h3>
+          <p className="text-cyan-400 font-medium">{edu.degree}</p>
+        </div>
+        <span className="text-xs font-mono text-slate-500 whitespace-nowrap">
+          {edu.period}
+        </span>
+      </div>
+
+      {edu.exchange && (
+        <div className="mt-4 pl-4 border-l-2 border-slate-700">
+          <p className="text-sm text-slate-300 font-medium">
+            {edu.exchange.label} — {edu.exchange.institution}
+          </p>
+          <p className="text-sm text-slate-500">GPA: {edu.exchange.gpa}</p>
+        </div>
+      )}
+    </motion.div>
+  );
+}
 
 const Education = () => {
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50" id="education">
-      <div className="container mx-auto px-6">
-        {/* Section Header */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+    <section id="education" className="relative py-24">
+      <div className="absolute top-0 left-0 right-0 section-divider" />
+      <div className="max-w-4xl mx-auto px-6">
+        <motion.div
+          className="text-center mb-14"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+          <span className="text-sm font-mono text-cyan-400 tracking-wider uppercase block mb-2">
+            Academic Background
+          </span>
+          <h2 className="text-4xl lg:text-5xl font-bold">
             <span className="gradient-text">Education</span>
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Academic foundation in software engineering with international experience
-          </p>
         </motion.div>
 
-        {/* Education Cards */}
-        <div className="max-w-4xl mx-auto space-y-8">
-          {/* Main Degree */}
-          <motion.div 
-            className="enhanced-card p-8 relative overflow-hidden"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            {/* Background Pattern */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
-            
-            <div className="relative">
-              {/* Header */}
-              <div className="flex items-start gap-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <AcademicCapIcon className="w-8 h-8 text-white" />
-                </div>
-                
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                    {EDUCATION.degree}
-                  </h3>
-                  
-                  <div className="flex items-center gap-2 text-blue-600 font-semibold mb-3">
-                    <BuildingLibraryIcon className="w-5 h-5" />
-                    {EDUCATION.institution}
-                  </div>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 text-sm text-slate-500">
-                    <div className="flex items-center gap-1">
-                      <CalendarIcon className="w-4 h-4" />
-                      {EDUCATION.duration}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <MapPinIcon className="w-4 h-4" />
-                      {EDUCATION.location}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Key Highlights */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div className="text-center p-4 glass rounded-xl">
-                  <div className="text-2xl font-bold gradient-text">B.Eng</div>
-                  <div className="text-sm text-slate-600">Software Engineering</div>
-                </div>
-                <div className="text-center p-4 glass rounded-xl">
-                  <div className="text-2xl font-bold gradient-text">4 Years</div>
-                  <div className="text-sm text-slate-600">Program Duration</div>
-                </div>
-                <div className="text-center p-4 glass rounded-xl">
-                  <div className="text-2xl font-bold gradient-text">2026</div>
-                  <div className="text-sm text-slate-600">Expected Graduation</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Exchange Program */}
-          {EDUCATION.exchange && (
-            <motion.div 
-              className="enhanced-card p-8"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <StarIcon className="w-6 h-6 text-white" />
-                </div>
-                
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className="text-xl font-bold text-slate-900">Exchange Program</h4>
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
-                      International Experience
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-green-600 font-semibold mb-3">
-                    <BuildingLibraryIcon className="w-4 h-4" />
-                    {EDUCATION.exchange.institution}
-                  </div>
-                  
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-600">GPA:</span>
-                      <span className="font-bold text-green-600">{EDUCATION.exchange.gpa}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-slate-500">
-                      <MapPinIcon className="w-4 h-4" />
-                      San Francisco, CA
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </div>
-
-        {/* Additional Info */}
-        <motion.div 
-          className="text-center mt-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+        <motion.div
+          className="grid gap-6"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
         >
-          <div className="glass p-6 rounded-2xl max-w-md mx-auto">
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              Academic Focus
-            </h3>
-            <p className="text-slate-600 text-sm">
-              Specializing in AI/ML, full-stack development, and software architecture with hands-on industry experience
-            </p>
-          </div>
+          {EDUCATION.map((edu, i) => (
+            <EducationCard key={i} edu={edu} />
+          ))}
         </motion.div>
       </div>
     </section>
   );
 };
 
-export default Education; 
+export default Education;

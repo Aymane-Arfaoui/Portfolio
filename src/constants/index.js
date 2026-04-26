@@ -1,192 +1,289 @@
-import project1 from "../assets/projects/project-1.jpg";
-import project2 from "../assets/projects/project-2.jpg";
-import project3 from "../assets/projects/project-3.jpg";
-import project4 from "../assets/projects/project-4.jpg";
-import almentorImage from "../assets/almentor.png";
-import defendlyImage from "../assets/defendly.png";
-import athleticaImage from "../assets/athletica.png";
-import sfhacksImage from "../assets/sfhacks.png";
-
-export const HERO_CONTENT = `I'm Aymane Arfaoui, a Software Engineering student at Concordia University passionate about building transformative technology. As a Machine Learning Engineer at Pratt & Whitney, I've developed patented AI models saving millions annually. I'm the creator of Almentor - an AI math explainer that reached 12k users in 3 months, and co-founder of Defendly - an AI-powered traffic ticket defense platform. My work spans from aerospace ML systems to consumer apps that make complex technology accessible to everyone.`;
-
-export const ABOUT_TEXT = `I am a dedicated Software Engineering student with a strong foundation in machine learning, full-stack development, and systems programming. My experience spans from developing patented ML models at Pratt & Whitney to building scalable ETL workflows at Raytheon Technologies. I'm passionate about creating innovative solutions that bridge the gap between cutting-edge technology and real-world applications. My technical expertise includes Python, JavaScript, React Native, TensorFlow, AWS, and C/C++. I thrive in collaborative environments and enjoy tackling complex problems that require both technical depth and creative thinking.`;
-
-export const EXPERIENCES = [
-  {
-    year: "Aug 2024 – Present",
-    role: "Machine Learning Engineer Intern",
-    company: "Pratt & Whitney",
-    location: "Longueuil, QC",
-    description: `Led development of a patented scalable Bayesian Monte Carlo surrogate model that predicts electrode consumption in real time, saving $3M+ annually. Improved WEDM defect-detection accuracy by 20% using BNNs and statistical process optimization. Filed a disclosure for 3D visualization using Dirichlet-to-Neumann maps. Patented architecture to minimize simulation-to-reality discrepancies using domain, physics-guided, and context losses.`,
-    technologies: ["Python", "JavaScript", "React", "Flask", "AWS", "C#", "Jira", "CI/CD"],
-    impact: "$3M+ potential Savings",
-    highlight: "Patent-Pending ML Model"
+export const HERO_CONTENT = {
+  label: "Software Engineer · ML Systems · Founder",
+  headline: "I ship production systems that scale.",
+  subheadline:
+    "Full-stack engineer and founder with deep experience in ML infrastructure, data platforms, and distributed systems. From leading a 10-engineer team that beat Pratt & Whitney's best model by 38.2%, to deploying autonomous AI agents in production — I build software that works at scale and solves hard problems.",
+  cta: {
+    primary: { text: "View AeroML Case Study", href: "#aeroml" },
+    secondary: { text: "Visit Cogentic", href: "https://cogentichq.com/" },
+    tertiary: { text: "Get in Touch", href: "#contact" },
   },
-  {
-    year: "Jan 2024 – Aug 2024",
-    role: "Software Engineer Intern",
-    company: "Pratt & Whitney",
-    location: "Longueuil, QC",
-    description: `Built and deployed a full-stack app integrated with SAP APIs, reducing manual engine-part data processing by ~23 minutes per employee. Engineered an EDM monitoring system with OPC UA protocol and visualizations using D3.js and Chart.js.`,
-    technologies: ["Python", "TensorFlow", "Scikit-learn", "Pandas", "NumPy"],
-    impact: "23min Saved Per Employee",
-    highlight: "Full-Stack Integration"
+};
+
+export const AEROML = {
+  title: "AeroML",
+  subtitle: "No-Code AutoML Platform for Aerospace Manufacturing",
+  summary:
+    "AeroML is a local-first no-code AutoML platform built for aerospace manufacturing teams. I led a team of 10+ engineers to design and ship an end-to-end ML system that lets non-technical users ingest, clean, visualize, train, evaluate, and deploy predictive models. In a Wire EDM defect-prediction use case for Pratt & Whitney, AeroML outperformed the best internal baseline by 38.2% MAE, while reducing model-building time from weeks to minutes.",
+  videoUrl: "https://drive.google.com/file/d/1AyQwt_PZ091EtPpPlzbzziFQuU69pJsA/view?usp=sharing",
+  links: {
+    presentation:
+      "https://drive.google.com/file/d/1AyQwt_PZ091EtPpPlzbzziFQuU69pJsA/view?usp=sharing",
+    github: "https://github.com/Aymane-Arfaoui",
+    contact: "#contact",
   },
-  {
-    year: "Sep 2023 – Dec 2023",
-    role: "Data Engineer Intern",
-    company: "Raytheon Technologies",
-    location: "Longueuil, QC",
-    description: `Reduced machine downtime by 16% with automated SPC and anomaly detection pipelines. Built scalable ETL workflows and analytics dashboards.`,
-    technologies: ["Python", "PostgreSQL", "Spark", "Pandas", "Matplotlib"],
-    impact: "16% Downtime Reduction",
-    highlight: "Automated Pipelines"
+  metrics: [
+    { value: "38.2%", label: "MAE Improvement", detail: "vs Pratt & Whitney internal baseline" },
+    { value: "10+", label: "Engineers Led", detail: "Full cross-functional team" },
+    { value: "Minutes", label: "Model Build Time", detail: "Down from weeks" },
+    { value: "Local-First", label: "Secure Desktop", detail: "Data stays on-device" },
+  ],
+  problem:
+    "Aerospace manufacturing teams sit on valuable process data, but building ML models requires data scientists, manual cleaning, Jupyter notebooks, and long iteration cycles. Teams at Pratt & Whitney needed weeks to go from raw manufacturing data to a usable predictive model.",
+  solution:
+    "AeroML turns the entire ML lifecycle into a guided desktop workflow. Non-technical engineers upload a CSV, clean it with one click, visualize quality trends, train models via AutoML, compare results on a leaderboard, and deploy predictions — all without writing a single line of code.",
+  architecture: [
+    {
+      stage: "Bronze",
+      title: "Raw Ingestion",
+      description:
+        "Raw CSV/Excel data ingested as-is. Schema detected, metadata captured, lineage tracked from the first byte.",
+      color: "from-amber-700 to-amber-500",
+    },
+    {
+      stage: "Silver",
+      title: "Cleaned & Validated",
+      description:
+        "Automated cleaning, type inference, null handling, outlier detection, and schema validation. Fully reproducible transformations.",
+      color: "from-slate-400 to-slate-300",
+    },
+    {
+      stage: "Gold",
+      title: "Analytics-Ready",
+      description:
+        "Feature-engineered datasets powering visualizations, AutoML training, evaluation leaderboards, and prediction endpoints.",
+      color: "from-yellow-500 to-amber-400",
+    },
+  ],
+  features: [
+    { title: "CSV / Excel Upload", description: "Drag-and-drop data ingestion with automatic format detection" },
+    { title: "Dataset Profiling", description: "Statistical summaries, distributions, and data-quality scores" },
+    { title: "Automated Cleaning", description: "One-click null handling, outlier removal, and type casting" },
+    { title: "Data Quality Report", description: "Visual report cards highlighting issues and cleaning actions" },
+    { title: "Visual Dashboards", description: "Interactive charts for trends, correlations, and distributions" },
+    { title: "AutoML Training", description: "CASH-style model search with AutoGluon-level experimentation" },
+    { title: "Evaluation Leaderboard", description: "Side-by-side model comparison with metrics and rankings" },
+    { title: "Prediction Interface", description: "Upload new data, select a model, get instant predictions" },
+    { title: "Desktop Packaging", description: "Electron-wrapped local-first app — no cloud dependency required" },
+  ],
+  role: "Founder, technical lead, and team lead. Architected the system, defined the roadmap, coordinated a team of 10+ engineers across frontend, backend, ML, deployment, and documentation. Directed backend and ML strategy, led stakeholder communication with Pratt & Whitney, executed release management, and delivered the final presentation.",
+  techStack: [
+    "Python",
+    "FastAPI",
+    "Electron",
+    "React",
+    "TypeScript",
+    "Docker",
+    "GitHub Actions",
+    "Pandas",
+    "NumPy",
+    "scikit-learn",
+    "AutoML",
+    "PostgreSQL",
+    "DuckDB",
+    "Parquet",
+    "CI/CD",
+  ],
+  impact: {
+    headline: "38.2% better MAE than Pratt & Whitney's best internal model.",
+    points: [
+      "Advanced ML models built in minutes instead of weeks",
+      "Local-first secure deployment — data never leaves the device",
+      "Reusable platform generalizable beyond aerospace manufacturing",
+      "Medallion architecture ensuring reproducibility and data lineage",
+    ],
   },
-];
+};
 
 export const PROJECTS = [
   {
-    title: "Almentor",
-    type: "AI Math Explainer Desktop App",
-    image: almentorImage,
-    description: "Revolutionary desktop application that transforms screenshots of math problems into beautifully animated video explanations using Manim and AI. Features real-time problem recognition, step-by-step solution generation, and AI-narrated video creation. Reached 12k users in just 3 months with potential of 3M+ dollars in savings for educational institutions.",
-    technologies: ["Electron", "JavaScript", "Python", "Manim", "AWS", "OpenAI API", "Computer Vision"],
-    duration: "May 2025 – Present",
-    metrics: "12k Users in 3 Months",
-    website: "https://almentor.co",
-    github: "https://github.com/Aymane-Arfaoui/Almentor",
-    featured: true
+    title: "AeroML",
+    type: "No-Code AutoML Platform",
+    description:
+      "Led 10+ engineers to ship a local-first AutoML platform for Pratt & Whitney. Outperformed their best internal model by 38.2% MAE in Wire EDM defect prediction.",
+    technologies: ["Python", "FastAPI", "Electron", "React", "AutoML", "Docker"],
+    metric: "38.2% MAE Improvement",
+    href: "#aeroml",
+    featured: true,
   },
   {
-    title: "Defendly AI",
-    type: "AI-Powered Legal Defense Platform",
-    image: defendlyImage,
-    description: "Intelligent traffic ticket defense platform that analyzes tickets for legal errors, jurisdictional issues, and defense opportunities. Built with advanced AI models trained on millions of legal cases, helping users save thousands on fines while protecting insurance rates. Features global coverage across 13+ regions.",
-    technologies: ["React", "Next.js", "Python", "TensorFlow", "AWS", "Stripe", "Legal APIs"],
-    duration: "2024 – Present",
-    metrics: "93% Success Rate",
-    website: "https://defendly.vercel.app",
+    title: "Cogentic",
+    type: "AI Agent Infrastructure & Integrations",
+    description:
+      "Founded and lead an AI implementation company delivering autonomous agents and integrations for legal, fintech, and manufacturing clients.",
+    technologies: ["AI Agents", "Claude API", "AWS", "Python", "Terraform"],
+    metric: "Multi-Industry Deployments",
+    href: "https://cogentichq.com/",
+    featured: true,
+  },
+  {
+    title: "Defendly",
+    type: "Content Safety & Risk Detection",
+    description:
+      "Intelligent traffic-ticket defense platform that analyzes tickets for legal errors, jurisdictional issues, and defense opportunities using advanced AI models.",
+    technologies: ["React", "Next.js", "Python", "AI/ML", "Stripe"],
+    metric: "93% Success Rate",
+    href: "https://defendly.vercel.app",
     github: "https://github.com/Aymane-Arfaoui/Defendly",
-    featured: true
+    featured: false,
   },
   {
-    title: "Athletica+",
-    type: "iOS App",
-    image: athleticaImage,
-    description: "A comprehensive fitness companion app designed for iPad and iPhone that combines personalized workout plans, smart tracking, and intuitive progress insights. Features real-time progress tracking, goal-based programs, and a seamless user experience to help users unlock their full potential.",
-    technologies: ["React Native (Expo)", "iOS", "TestFlight", "Health & Fitness"],
-    duration: "2025 – Present",
-    metrics: "Live on App Store",
-    appStore: "https://apps.apple.com/us/app/athletica/id6748931550",
-    github: "https://github.com/Aymane-Arfaoui/Athletica",
-    featured: false
+    title: "Almentor",
+    type: "AI Math Explainer",
+    description:
+      "Desktop app that transforms screenshots of math problems into animated video explanations using Manim and AI. Reached 12k users in 3 months.",
+    technologies: ["Electron", "Python", "Manim", "OpenAI API", "AWS"],
+    metric: "12k Users in 3 Months",
+    href: "https://almentor.co",
+    github: "https://github.com/Aymane-Arfaoui/Almentor",
+    featured: false,
+  },
+];
+
+export const EXPERIENCES = [
+  {
+    period: "03/2026 – Present",
+    role: "CEO & Founder",
+    company: "Cogentic",
+    location: "Montreal, QC",
+    description:
+      "Founded and lead an AI implementation company delivering autonomous AI agents and integrations for legal, fintech, and manufacturing clients. Architected agent pipelines, managed client engagements, and shipped production deployments across multiple verticals.",
+    technologies: ["AI Agents", "Claude API", "Python", "AWS", "Terraform", "Docker"],
+    impact: "Multi-Vertical AI Deployments",
+    href: "https://cogentichq.com/",
   },
   {
-    title: "Crowdsourcing Safety App",
-    type: "Web App",
-    image: sfhacksImage,
-    description: "Mapped dangerous zones and enabled one-tap emergency calls to improve safety for women. Won Google Cloud Prize at SF Hacks 2024.",
-    technologies: ["JavaScript", "React", "TypeScript", "Google Maps API"],
-    duration: "Apr 2024",
-    award: "Google Cloud Prize Winner",
-    featured: false
+    period: "04/2026 – Present",
+    role: "AI Engineer / Software Engineer",
+    company: "Lexsy AI",
+    location: "Remote",
+    description:
+      "Deployed AI agents on AWS EC2, integrated Claude API for real-time inference, and built voice and screen-sharing workflows for autonomous agent interactions. Engineered low-latency pipelines and production monitoring dashboards.",
+    technologies: ["Claude API", "AWS EC2", "Python", "Docker", "WebRTC"],
+    impact: "Production Agent Deployment",
   },
   {
-    title: "Unix-Like File System",
-    type: "Systems Project",
-    image: project4,
-    description: "Built a file system from scratch in C supporting directory hierarchy, contiguous allocation, dynamic file growth, and standard operations.",
-    technologies: ["C"],
-    duration: "Jan 2024 – Apr 2024",
-    featured: false
+    period: "09/2023 – 04/2026",
+    role: "Software Engineer / ML Infrastructure",
+    company: "Pratt & Whitney / RTX",
+    location: "Longueuil, QC",
+    description:
+      "Built aerospace ML infrastructure including Bayesian Monte Carlo surrogate models, OPC-UA real-time data pipelines, and defect-prediction systems. Developed patented architectures for digital-twin reality-gap analysis and 3D visualization. Led the AeroML platform that outperformed internal baselines by 38.2% MAE.",
+    technologies: ["Python", "React", "FastAPI", "AWS", "TensorFlow", "OPC-UA", "D3.js", "Docker"],
+    impact: "38.2% MAE Improvement · $3M+ Savings",
   },
 ];
 
 export const SKILLS = {
-  programming_languages: ["Python", "JavaScript", "C", "C++", "Java", "SQL"],
-  mobile: ["React Native (Expo)", "iOS", "Xcode", "App Store Connect", "TestFlight"],
-  tools_and_technologies: [
-    "TensorFlow", "Scikit-learn", "AWS", "SageMaker", "Azure", "Electron", "Supabase",
-    "Flask", "Django", "Docker", "Git", "Jenkins", "Kubernetes", "Jira", "Spark",
-    "PostgreSQL", "MySQL", "MongoDB"
+  languages: ["Python", "C++", "C", "Java", "JavaScript", "SQL", "Go", "Bash/Shell"],
+  software_engineering: [
+    "Software Development",
+    "Systems Engineering",
+    "Software Design",
+    "Version Control",
+    "Automation",
+    "CI/CD",
+    "SRE",
+    "Reliability Engineering",
   ],
-  foundations: ["Data Structures & Algorithms", "Operating Systems", "Databases", "Networking"]
+  backend_systems: [
+    "FastAPI",
+    "Node.js",
+    "Kafka",
+    "RabbitMQ",
+    "PostgreSQL",
+    "Redis",
+    "MQTT",
+    "Distributed Systems",
+  ],
+  ai_ml: [
+    "LLMs",
+    "AI Agents",
+    "Claude API",
+    "Bayesian Methods",
+    "AutoML / HPO",
+    "CASH Algorithms",
+    "Data Analysis",
+    "Simulation",
+    "scikit-learn",
+    "NumPy",
+    "Pandas",
+  ],
+  infra_cloud: [
+    "Terraform",
+    "Docker",
+    "Kubernetes",
+    "AWS EC2/EKS/S3",
+    "GCP GKE/GCS",
+    "Tailscale",
+    "GitHub Actions",
+  ],
 };
 
-export const EDUCATION = {
-  institution: "Concordia University",
-  location: "Montréal, QC",
-  degree: "B.Eng. Software Engineering",
-  duration: "Sept 2022 – May 2026",
-  exchange: {
-    institution: "San Francisco State University",
-    gpa: "3.7"
-  }
-};
+export const EDUCATION = [
+  {
+    institution: "Georgia Institute of Technology",
+    degree: "Master of Science in Computer Science",
+    period: "09/2026 – 05/2028",
+    highlight: true,
+  },
+  {
+    institution: "Concordia University, Gina Cody School of Engineering",
+    degree: "Bachelor of Engineering in Software Engineering",
+    period: "09/2022 – 05/2026",
+    exchange: {
+      institution: "San Francisco State University",
+      label: "Exchange Term",
+      gpa: "3.7/4.0",
+    },
+  },
+];
 
-export const PATENTS_AND_RESEARCH = [
+export const PATENTS = [
   {
     title: "Scalable Bayesian Monte Carlo for Aerospace EDM",
-    status: "Patent-Pending",
-    description: "Surrogate-model–driven framework predicting electrode consumption using UTM-based depth sensing. Saves millions annually.",
-    impact: "$3M+ potential Savings"
+    status: "Patent Pending",
+    description:
+      "Surrogate-model-driven framework predicting electrode consumption using UTM-based depth sensing. Saves millions annually in manufacturing costs.",
   },
   {
     title: "Reality-Gap Analysis for Digital Twins",
-    status: "Patent-Pending",
-    description: "Minimizes sim-to-reality discrepancies using domain, physics-guided, and context losses. Includes Lagrangian-based error detection.",
-    impact: "20% Accuracy Improvement"
+    status: "Patent Pending",
+    description:
+      "Minimizes simulation-to-reality discrepancies using domain, physics-guided, and context losses with Lagrangian-based error detection.",
   },
   {
-    title: "Advanced 3D Visualization using Dirichlet-to-Neumann Maps",
-    status: "Patent-Pending",
-    description: "Novel approach to 3D visualization techniques for complex mathematical models and simulations.",
-    impact: "Enhanced Visualization"
+    title: "3D Visualization via Dirichlet-to-Neumann Maps",
+    status: "Patent Pending",
+    description:
+      "Novel approach to 3D visualization of complex mathematical models and simulations for aerospace engineering applications.",
   },
-  {
-    title: "Automated Anomaly Detection Pipeline",
-    status: "Patent-Pending",
-    description: "Machine learning-based system for real-time anomaly detection in manufacturing processes.",
-    impact: "16% Downtime Reduction"
-  }
 ];
 
-export const EXTRACURRICULARS = [
+export const LEADERSHIP = [
   {
     role: "VP Sponsorship",
-    organization: "Engineering & Computer Science Association (ECA), Concordia",
-    description: "Secured sponsorships for hackathons and student tech initiatives by forging corporate partnerships."
-  }
+    organization: "Engineering & Computer Science Association",
+    description:
+      "Secured corporate sponsorships for hackathons and student tech initiatives at Concordia University.",
+  },
+  {
+    role: "Student Ambassador",
+    organization: "San Francisco State University Exchange Program",
+    description:
+      "Represented the international exchange program and supported incoming students during the SFSU term.",
+  },
 ];
 
 export const CONTACT = {
-  currentCity: "Montreal, Quebec",
-  phoneNo: "+1 (514) 632-8622",
+  name: "Aymane Arfaoui",
+  location: "Montreal, QC",
   email: "arfaouiaymane@hotmail.com",
+  phone: "514-632-8622",
   linkedin: "https://www.linkedin.com/in/aymanearfaoui",
-  github: "https://github.com/Aymane-Arfaoui"
+  github: "https://github.com/Aymane-Arfaoui",
+  portfolio: "https://aymanearfaoui.vercel.app",
+  cogentic: "https://cogentichq.com/",
+  aeromlPresentation:
+    "https://drive.google.com/file/d/1AyQwt_PZ091EtPpPlzbzziFQuU69pJsA/view?usp=sharing",
 };
-
-export const ACHIEVEMENTS = [
-  {
-    number: "12k",
-    label: "Almentor Users",
-    description: "In 3 months"
-  },
-  {
-    number: "$3M+",
-    label: "potential Savings",
-    description: "From ML Models"
-  },
-  {
-    number: "93%",
-    label: "Success Rate",
-    description: "Defendly Platform"
-  },
-  {
-    number: "4",
-    label: "Patents Pending",
-    description: "AI Innovations"
-  }
-];
-

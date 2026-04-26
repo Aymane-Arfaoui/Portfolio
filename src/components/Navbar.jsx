@@ -1,187 +1,168 @@
 import React, { useState, useEffect } from 'react';
-import { FaLinkedin, FaGithub } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CONTACT } from '../constants';
+
+const navLinks = [
+  { label: 'About', href: '#about' },
+  { label: 'AeroML', href: '#aeroml' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Education', href: '#education' },
+  { label: 'Contact', href: '#contact' },
+];
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const navItems = [
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Education', href: '#education' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Patents', href: '#patents' },
-    { name: 'Projects', href: '#projects' },
-    // { name: 'Leadership', href: '#leadership' },
-    { name: 'Contact', href: '#contact' }
-  ];
-
-  const scrollToSection = (href) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
-    setIsMobileMenuOpen(false);
-  };
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   return (
-    <motion.nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'glass shadow-lg' 
-          : 'bg-transparent'
-      }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
-      <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between py-4">
+    <>
+      <motion.nav
+        initial={{ y: -80 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'glass-dark-strong shadow-lg shadow-black/20'
+            : 'bg-transparent'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
-          <motion.div 
-            className="flex items-center space-x-3"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-          >
-            <span className="text-xl font-bold text-slate-900">
-              Aymane Arfaoui
-            </span>
-          </motion.div>
+          <a href="#about" className="text-lg font-bold tracking-tight">
+            <span className="gradient-text-cyan">A</span>
+            <span className="text-slate-200">ymane</span>
+          </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item, index) => (
-              <motion.button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200 relative"
-                whileHover={{ y: -2 }}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.2 }}
+          {/* Desktop links */}
+          <div className="hidden lg:flex items-center gap-7">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-[13px] text-slate-400 hover:text-cyan-400 transition-colors duration-200"
               >
-                {item.name}
-                <motion.div
-                  className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600"
-                  whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.button>
+                {link.label}
+              </a>
             ))}
           </div>
 
-          {/* Social Links & CTA */}
-          <div className="hidden md:flex items-center space-x-4">
-            <motion.a 
-              href="https://www.linkedin.com/in/aymanearfaoui" 
-              target="_blank" 
+          {/* Desktop right side */}
+          <div className="hidden lg:flex items-center gap-3">
+            <a
+              href={CONTACT.linkedin}
+              target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-slate-600 hover:text-blue-600 transition-colors duration-200"
-              whileHover={{ scale: 1.1, rotate: 5 }}
+              className="text-[13px] text-slate-400 hover:text-cyan-400 transition-colors"
             >
-              <FaLinkedin className="w-5 h-5" />
-            </motion.a>
-            
-            <motion.a 
-              href="https://github.com/Aymane-Arfaoui" 
-              target="_blank" 
+              LinkedIn
+            </a>
+            <a
+              href={CONTACT.github}
+              target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-slate-600 hover:text-slate-900 transition-colors duration-200"
-              whileHover={{ scale: 1.1, rotate: -5 }}
+              className="text-[13px] text-slate-400 hover:text-cyan-400 transition-colors"
             >
-              <FaGithub className="w-5 h-5" />
-            </motion.a>
-
-            <motion.button 
-              onClick={() => scrollToSection('#contact')}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full font-semibold shadow-md hover:shadow-lg transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              GitHub
+            </a>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              className="ml-2 px-4 py-1.5 text-[13px] font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg hover:shadow-md hover:shadow-cyan-500/20 transition-all duration-200"
             >
               Hire Me
-            </motion.button>
+            </a>
           </div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            className="md:hidden p-2 text-slate-700"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden flex flex-col gap-1.5 p-2"
+            aria-label="Toggle navigation"
           >
-            {isMobileMenuOpen ? (
-              <XMarkIcon className="w-6 h-6" />
-            ) : (
-              <Bars3Icon className="w-6 h-6" />
-            )}
-          </motion.button>
+            <motion.span
+              animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+              className="block w-6 h-0.5 bg-slate-300"
+            />
+            <motion.span
+              animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+              className="block w-6 h-0.5 bg-slate-300"
+            />
+            <motion.span
+              animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+              className="block w-6 h-0.5 bg-slate-300"
+            />
+          </button>
         </div>
+      </motion.nav>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
           <motion.div
-            className="md:hidden glass rounded-2xl mt-4 p-6"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="fixed inset-0 z-40 bg-navy-900/98 backdrop-blur-xl flex flex-col items-center justify-center gap-6"
           >
-            <div className="flex flex-col space-y-4">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-slate-700 hover:text-blue-600 font-medium py-2 border-b border-slate-200 last:border-b-0 text-left"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {item.name}
-                </motion.button>
-              ))}
-              
-              <div className="flex items-center justify-between pt-4">
-                <div className="flex space-x-4">
-                  <a 
-                    href="https://www.linkedin.com/in/aymanearfaoui" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="p-2 text-slate-600 hover:text-blue-600"
-                  >
-                    <FaLinkedin className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href="https://github.com/Aymane-Arfaoui" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="p-2 text-slate-600 hover:text-slate-900"
-                  >
-                    <FaGithub className="w-5 h-5" />
-                  </a>
-                </div>
-                
-                <button 
-                  onClick={() => scrollToSection('#contact')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full font-semibold text-sm"
-                >
-                  Hire Me
-                </button>
-              </div>
+            {navLinks.map((link, i) => (
+              <motion.a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className="text-2xl font-medium text-slate-200 hover:text-cyan-400 transition-colors"
+              >
+                {link.label}
+              </motion.a>
+            ))}
+            <div className="flex gap-6 mt-4">
+              <a
+                href={CONTACT.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-cyan-400 transition-colors"
+              >
+                LinkedIn
+              </a>
+              <a
+                href={CONTACT.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-cyan-400 transition-colors"
+              >
+                GitHub
+              </a>
             </div>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              onClick={() => setMobileOpen(false)}
+              className="mt-2 px-6 py-3 text-base font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
+            >
+              Hire Me
+            </a>
           </motion.div>
         )}
-      </div>
-    </motion.nav>
+      </AnimatePresence>
+    </>
   );
 };
 
