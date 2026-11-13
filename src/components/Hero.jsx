@@ -1,223 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { HERO_CONTENT } from '../constants';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { HERO_CONTENT, CONTACT } from '../constants';
+import { EASE, PrimaryButton, GhostButton } from './ui/motion';
 
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
-  },
-};
+const HeroScene = lazy(() => import('./three/HeroScene'));
 
-const item = {
-  hidden: { y: 30, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.7, ease: 'easeOut' } },
-};
-
-const terminalLines = [
-  { prompt: '~', cmd: 'python train.py --model automl --data bronze/', delay: 0 },
-  { output: '▸ Loading 2.4M rows from parquet...', delay: 1800 },
-  { output: '▸ Schema validated · 47 features detected', delay: 2800 },
-  { output: '▸ Cleaning pipeline: nulls, outliers, type-cast ✓', delay: 3800 },
-  { output: '▸ Training 12 models · CASH search space', delay: 5000 },
-  { output: '▸ Best model: XGBoost (MAE: 0.0412) — 38.2% improvement', delay: 6500 },
-  { prompt: '~', cmd: 'deploy --target production --local-first', delay: 8200 },
-  { output: '✓ Model deployed · Electron desktop ready', delay: 9500 },
-];
-
-function AnimatedTerminal() {
-  const [visibleLines, setVisibleLines] = useState([]);
-
-  useEffect(() => {
-    const timers = terminalLines.map((line, i) =>
-      setTimeout(() => setVisibleLines((prev) => [...prev, line]), line.delay)
-    );
-    const resetTimer = setTimeout(() => {
-      setVisibleLines([]);
-      timers.forEach(clearTimeout);
-      terminalLines.forEach((line, i) =>
-        setTimeout(() => setVisibleLines((prev) => [...prev, line]), line.delay)
-      );
-    }, 13000);
-    return () => {
-      timers.forEach(clearTimeout);
-      clearTimeout(resetTimer);
-    };
-  }, []);
-
+function Letters({ text, start, className }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.8 }}
-      className="w-full max-w-lg"
-    >
-      <div className="rounded-xl overflow-hidden border border-white/[0.06] shadow-2xl shadow-black/40">
-        {/* Title bar */}
-        <div className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.06] border-b border-white/[0.04]">
-          <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-          </div>
-          <span className="text-[11px] font-mono text-slate-500 ml-2">aymane@dev — aeroml</span>
-        </div>
-        {/* Terminal body */}
-        <div className="bg-[#0c1222] p-4 font-mono text-[13px] leading-relaxed min-h-[240px]">
-          {visibleLines.map((line, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-1"
-            >
-              {line.prompt ? (
-                <span>
-                  <span className="text-cyan-400">{line.prompt}</span>
-                  <span className="text-slate-500"> $ </span>
-                  <span className="text-slate-200">{line.cmd}</span>
-                </span>
-              ) : (
-                <span className="text-slate-400">{line.output}</span>
-              )}
-            </motion.div>
-          ))}
+    <span className={className} aria-label={text}>
+      {text.split('').map((char, i) => (
+        <span key={i} className="-mb-[0.15em] inline-block overflow-hidden pb-[0.15em] align-bottom" aria-hidden>
           <motion.span
-            animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.8, repeat: Infinity }}
-            className="inline-block w-2 h-4 bg-cyan-400 ml-0.5 align-middle"
-          />
-        </div>
-      </div>
-    </motion.div>
+            className="inline-block"
+            initial={{ y: '115%' }}
+            animate={start ? { y: '0%' } : {}}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.1 + i * 0.045 }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+        </span>
+      ))}
+    </span>
   );
 }
 
-const highlights = [
-  { label: 'Georgia Tech MSCS', accent: false },
-  { label: '3 Patents Pending', accent: false },
-  { label: 'Founder @ Cogentic', accent: true },
-];
+function RotatingRole({ roles }) {
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % roles.length), 2600);
+    return () => clearInterval(id);
+  }, [roles.length]);
 
-const Hero = () => {
+  const longest = roles.reduce((a, b) => (b.length > a.length ? b : a));
+
   return (
-    <section
-      id="about"
-      className="relative min-h-screen flex items-center overflow-hidden dot-grid"
-    >
-      {/* Gradient orbs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-cyan-500/[0.07] blur-[120px]"
-          animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute top-1/3 -right-40 w-[400px] h-[400px] rounded-full bg-blue-600/[0.07] blur-[100px]"
-          animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute -bottom-20 left-1/3 w-[350px] h-[350px] rounded-full bg-violet-600/[0.05] blur-[80px]"
-          animate={{ x: [0, 40, 0], y: [0, -50, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 w-full">
-        <motion.div
-          className="flex flex-col lg:flex-row items-center gap-16"
-          variants={container}
-          initial="hidden"
-          animate="visible"
+    <span className="relative inline-block overflow-hidden pb-[0.1em] align-bottom">
+      <span className="invisible whitespace-nowrap">{longest}</span>
+      <AnimatePresence initial={false}>
+        <motion.span
+          key={roles[index]}
+          initial={{ y: '110%' }}
+          animate={{ y: '0%' }}
+          exit={{ y: '-110%' }}
+          transition={{ duration: 0.6, ease: EASE }}
+          className="gradient-text-cyan absolute left-0 top-0 whitespace-nowrap"
         >
-          {/* Left content */}
-          <div className="lg:w-3/5 text-center lg:text-left">
-            <motion.div variants={item} className="mb-6">
-              <span className="inline-block text-sm font-mono text-cyan-400 tracking-wider">
-                {HERO_CONTENT.label}
-              </span>
-            </motion.div>
+          {roles[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
-            <motion.h1
-              variants={item}
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] mb-6"
-            >
-              <span className="gradient-text">{HERO_CONTENT.headline}</span>
-            </motion.h1>
+const Hero = ({ ready }) => {
+  const { scrollY } = useScroll();
+  const contentY = useTransform(scrollY, [0, 800], [0, 180]);
+  const contentOpacity = useTransform(scrollY, [0, 600], [1, 0]);
 
-            <motion.p
-              variants={item}
-              className="text-lg text-slate-400 max-w-2xl mb-8 leading-relaxed"
-            >
-              {HERO_CONTENT.subheadline}
-            </motion.p>
+  const appear = (delay) => ({
+    initial: { opacity: 0, y: 30 },
+    animate: ready ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 1, ease: EASE, delay },
+  });
 
-            {/* Highlight badges */}
-            <motion.div
-              variants={item}
-              className="flex flex-wrap gap-3 justify-center lg:justify-start mb-10"
-            >
-              {highlights.map((h) => (
-                <span
-                  key={h.label}
-                  className={`inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-full border ${
-                    h.accent
-                      ? 'border-cyan-500/30 text-cyan-400 bg-cyan-500/[0.08]'
-                      : 'border-white/[0.08] text-slate-400 bg-white/[0.03]'
-                  }`}
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full ${h.accent ? 'bg-cyan-400' : 'bg-slate-500'}`} />
-                  {h.label}
-                </span>
-              ))}
-            </motion.div>
+  return (
+    <section id="about" className="relative min-h-[100svh] overflow-hidden">
+      <div className="absolute inset-0 grid-bg opacity-60" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,rgba(34,211,238,0.12),transparent_55%)]" />
 
-            <motion.div
-              variants={item}
-              className="flex flex-wrap gap-4 justify-center lg:justify-start"
-            >
-              <a
-                href={HERO_CONTENT.cta.primary.href}
-                className="px-7 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:-translate-y-0.5"
-              >
-                {HERO_CONTENT.cta.primary.text}
-              </a>
-              <a
-                href={HERO_CONTENT.cta.secondary.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-7 py-3.5 border border-slate-700 text-slate-300 font-semibold rounded-xl hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300"
-              >
-                {HERO_CONTENT.cta.secondary.text}
-              </a>
-              <a
-                href={HERO_CONTENT.cta.tertiary.href}
-                className="px-7 py-3.5 border border-slate-700 text-slate-300 font-semibold rounded-xl hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300"
-              >
-                {HERO_CONTENT.cta.tertiary.text}
-              </a>
-            </motion.div>
-          </div>
-
-          {/* Right: animated terminal */}
-          <div className="lg:w-2/5 flex justify-center">
-            <AnimatedTerminal />
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        animate={{ y: [0, 8, 0], opacity: [0.3, 0.7, 0.3] }}
-        transition={{ duration: 2.5, repeat: Infinity }}
+        className="absolute inset-0 lg:left-[30%]"
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={ready ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 2, ease: EASE, delay: 0.3 }}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-600">
-          <path d="M12 5v14M5 12l7 7 7-7" />
-        </svg>
+        <Suspense fallback={null}>
+          <HeroScene className="h-full w-full" />
+        </Suspense>
+      </motion.div>
+
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/70 to-transparent lg:via-navy-950/40" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950 to-transparent" />
+
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-6 pb-24 pt-32"
+      >
+        <motion.div {...appear(0)} className="mb-8 inline-flex w-fit items-center gap-3 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 backdrop-blur">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+          </span>
+          <span className="font-mono text-xs tracking-wider text-slate-300">{HERO_CONTENT.label}</span>
+        </motion.div>
+
+        <h1 className="font-display font-bold leading-[0.9] tracking-tighter">
+          <Letters text="Aymane" start={ready} className="block text-[17vw] sm:text-[13vw] lg:text-[9.5rem] text-slate-50" />
+          <Letters text="Arfaoui" start={ready} className="block text-[17vw] sm:text-[13vw] lg:text-[9.5rem] text-outline" />
+        </h1>
+
+        <motion.p {...appear(0.7)} className="mt-8 font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-slate-200">
+          {HERO_CONTENT.headline.replace(/\.$/, '')} — <br />
+          building <RotatingRole roles={HERO_CONTENT.rotatingRoles} />
+        </motion.p>
+
+        <motion.p {...appear(0.85)} className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-slate-400">
+          {HERO_CONTENT.subheadline}
+        </motion.p>
+
+        <motion.div {...appear(1)} className="mt-10 flex flex-wrap gap-4">
+          <PrimaryButton href={HERO_CONTENT.cta.primary.href}>{HERO_CONTENT.cta.primary.text}</PrimaryButton>
+          <GhostButton href={HERO_CONTENT.cta.secondary.href} external>
+            {HERO_CONTENT.cta.secondary.text} ↗
+          </GhostButton>
+        </motion.div>
+
+        <motion.div {...appear(1.15)} className="mt-14 flex flex-wrap gap-x-8 gap-y-3">
+          {HERO_CONTENT.highlights.map((h, i) => (
+            <div key={h} className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-slate-400">
+              <span className="text-cyan-400">0{i + 1}</span>
+              {h}
+            </div>
+          ))}
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-8 left-6 right-6 z-10 mx-auto flex max-w-7xl items-end justify-between font-mono text-[11px] uppercase tracking-[0.25em] text-slate-500"
+        initial={{ opacity: 0 }}
+        animate={ready ? { opacity: 1 } : {}}
+        transition={{ delay: 1.6, duration: 1 }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="relative h-10 w-[1px] overflow-hidden bg-white/10">
+            <motion.div
+              className="absolute left-0 top-0 h-4 w-full bg-cyan-400"
+              animate={{ y: [-16, 40] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </div>
+          Scroll to explore
+        </div>
+        <div className="hidden sm:flex gap-6">
+          <a href={CONTACT.github} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors">GitHub</a>
+          <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors">LinkedIn</a>
+        </div>
       </motion.div>
     </section>
   );

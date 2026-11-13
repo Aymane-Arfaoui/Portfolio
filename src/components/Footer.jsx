@@ -1,118 +1,101 @@
-import React from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CONTACT } from '../constants';
+import { EASE, GhostButton, PrimaryButton, SplitReveal } from './ui/motion';
 
-const fadeUp = {
-  hidden: { y: 30, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-};
+const WaveScene = lazy(() => import('./three/WaveScene'));
 
-const Footer = () => {
+function CopyEmail() {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${CONTACT.email}`;
+    }
+  };
   return (
-    <footer id="contact" className="relative">
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 section-divider" />
-        <div className="absolute inset-0 pointer-events-none">
-          <motion.div
-            className="absolute bottom-0 left-1/4 w-[500px] h-[500px] rounded-full bg-cyan-600/[0.04] blur-[120px]"
-            animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </div>
+    <button
+      onClick={copy}
+      className="group inline-flex items-center gap-3 font-mono text-sm text-slate-400 transition-colors hover:text-cyan-300"
+    >
+      {CONTACT.email}
+      <span className="rounded-md border border-white/10 px-2 py-0.5 text-[10px] uppercase tracking-wider">
+        {copied ? 'Copied ✓' : 'Copy'}
+      </span>
+    </button>
+  );
+}
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <span className="text-sm font-mono text-cyan-400 tracking-wider uppercase block mb-4">
-              Let's Talk
-            </span>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              <span className="gradient-text">Looking for my next challenge.</span>
-            </h2>
-            <p className="text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed">
-              I'm interested in roles where I can build high-impact systems at scale — data platforms, ML infrastructure, distributed systems, or anything that ships real software to real users. Let's connect.
-            </p>
-          </motion.div>
+const Footer = () => (
+  <footer id="contact" className="relative overflow-hidden">
+    <section className="relative flex min-h-[100svh] flex-col justify-center py-32">
+      <Suspense fallback={null}>
+        <WaveScene className="absolute inset-x-0 bottom-0 h-[65%] opacity-70" />
+      </Suspense>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-navy-950 to-transparent" />
 
-          <motion.div
-            className="flex flex-wrap justify-center gap-4 mb-16"
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="px-7 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Get in Touch
-            </a>
-            <a
-              href={CONTACT.cogentic}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-7 py-3.5 border border-slate-700 text-slate-300 font-semibold rounded-xl hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300"
-            >
-              Visit Cogentic
-            </a>
-            <a
-              href={CONTACT.aeromlPresentation}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-7 py-3.5 border border-slate-700 text-slate-300 font-semibold rounded-xl hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300"
-            >
-              Watch AeroML Demo
-            </a>
-          </motion.div>
-        </div>
-      </section>
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6">
+        <motion.div
+          className="mb-8 flex items-center gap-3"
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: EASE }}
+        >
+          <span className="font-mono text-xs text-cyan-400">08</span>
+          <span className="h-px w-10 bg-gradient-to-r from-cyan-400 to-transparent" />
+          <span className="font-mono text-xs uppercase tracking-[0.25em] text-slate-400">Contact</span>
+        </motion.div>
 
-      {/* Footer bar */}
-      <div className="border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-sm text-slate-500">
-            &copy; {new Date().getFullYear()} {CONTACT.name}
-          </div>
+        <h2 className="font-display text-[13vw] font-bold leading-[0.9] tracking-tighter lg:text-[10rem]">
+          <SplitReveal text="Let's build" className="block text-slate-50" />
+          <SplitReveal text="something real." className="block" wordClassName="gradient-text" delay={0.15} />
+        </h2>
 
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="text-sm text-slate-500 hover:text-cyan-400 transition-colors"
-            >
-              {CONTACT.email}
-            </a>
-            <a
-              href={`tel:${CONTACT.phone}`}
-              className="text-sm text-slate-500 hover:text-cyan-400 transition-colors"
-            >
-              {CONTACT.phone}
-            </a>
-            <a
-              href={CONTACT.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-slate-500 hover:text-cyan-400 transition-colors"
-            >
-              LinkedIn
-            </a>
-            <a
-              href={CONTACT.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-slate-500 hover:text-cyan-400 transition-colors"
-            >
-              GitHub
-            </a>
-          </div>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
+          className="mt-10 max-w-xl text-lg leading-relaxed text-slate-400"
+        >
+          I'm looking for roles where I can build high-impact systems at scale — data platforms, ML infrastructure,
+          distributed systems, or anything that ships real software to real users.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.45 }}
+          className="mt-12 flex flex-wrap items-center gap-4"
+        >
+          <PrimaryButton href={`mailto:${CONTACT.email}`}>Get in touch</PrimaryButton>
+          <GhostButton href={CONTACT.linkedin} external>LinkedIn ↗</GhostButton>
+          <GhostButton href={CONTACT.aeromlPresentation} external>AeroML demo ↗</GhostButton>
+        </motion.div>
+
+        <div className="mt-10">
+          <CopyEmail />
         </div>
       </div>
-    </footer>
-  );
-};
+    </section>
+
+    <div className="relative z-10 border-t border-white/5 bg-navy-950/80 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-slate-500 md:flex-row">
+        <span>© {new Date().getFullYear()} {CONTACT.name} · Designed & built with React, Three.js and Framer Motion</span>
+        <div className="flex gap-6">
+          <a href={CONTACT.github} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors">GitHub</a>
+          <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors">LinkedIn</a>
+          <a href={CONTACT.cogentic} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors">Cogentic</a>
+          <a href={`tel:${CONTACT.phone}`} className="hover:text-cyan-300 transition-colors">{CONTACT.phone}</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;

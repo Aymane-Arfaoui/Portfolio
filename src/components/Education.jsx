@@ -1,85 +1,55 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { EDUCATION } from '../constants';
+import { SectionHeader, TiltCard, fadeUp, stagger } from './ui/motion';
 
-const fadeUp = {
-  hidden: { y: 30, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-};
-
-const stagger = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-};
-
-function EducationCard({ edu }) {
-  return (
-    <motion.div
-      variants={fadeUp}
-      whileHover={{ scale: 1.02, borderColor: 'rgba(6,182,212,0.2)' }}
-      className={`glass-dark rounded-2xl p-8 border border-white/5 transition-colors relative overflow-hidden ${
-        edu.highlight ? 'gradient-border' : ''
-      }`}
-    >
-      {edu.highlight && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600" />
-      )}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-        <div>
-          <h3 className="text-lg font-bold text-slate-100">{edu.institution}</h3>
-          <p className="text-cyan-400 font-medium">{edu.degree}</p>
-        </div>
-        <span className="text-xs font-mono text-slate-500 whitespace-nowrap">
-          {edu.period}
-        </span>
-      </div>
-
-      {edu.exchange && (
-        <div className="mt-4 pl-4 border-l-2 border-slate-700">
-          <p className="text-sm text-slate-300 font-medium">
-            {edu.exchange.label} — {edu.exchange.institution}
-          </p>
-          <p className="text-sm text-slate-500">GPA: {edu.exchange.gpa}</p>
-        </div>
-      )}
-    </motion.div>
-  );
-}
-
-const Education = () => {
-  return (
-    <section id="education" className="relative py-24">
-      <div className="absolute top-0 left-0 right-0 section-divider" />
-      <div className="max-w-4xl mx-auto px-6">
-        <motion.div
-          className="text-center mb-14"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <span className="text-sm font-mono text-cyan-400 tracking-wider uppercase block mb-2">
-            Academic Background
-          </span>
-          <h2 className="text-4xl lg:text-5xl font-bold">
-            <span className="gradient-text">Education</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          className="grid gap-6"
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {EDUCATION.map((edu, i) => (
-            <EducationCard key={i} edu={edu} />
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-};
+const Education = () => (
+  <section id="education" className="relative py-32">
+    <div className="mx-auto max-w-7xl px-6">
+      <SectionHeader index="06" label="Education" title="Always" accent="learning." />
+      <motion.div
+        className="grid gap-6 md:grid-cols-2"
+        variants={stagger(0.15)}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {EDUCATION.map((edu) => (
+          <motion.div key={edu.institution} variants={fadeUp}>
+            <TiltCard
+              intensity={7}
+              className={`overflow-hidden rounded-3xl border p-10 ${
+                edu.highlight
+                  ? 'gradient-border border-transparent bg-gradient-to-br from-cyan-500/[0.08] to-violet-500/[0.06]'
+                  : 'border-white/[0.07] bg-white/[0.02]'
+              }`}
+            >
+              <div style={{ transform: 'translateZ(30px)' }} className="flex h-full flex-col">
+                <div className="mb-10 flex items-center justify-between">
+                  <span className="font-mono text-xs uppercase tracking-wider text-cyan-400">{edu.period}</span>
+                  {edu.highlight && (
+                    <span className="rounded-full bg-white px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-navy-950">
+                      Incoming
+                    </span>
+                  )}
+                </div>
+                <h3 className="font-display text-3xl font-bold leading-tight text-slate-50">{edu.institution}</h3>
+                <p className="mt-3 text-lg text-slate-300">{edu.degree}</p>
+                {edu.exchange && (
+                  <div className="mt-8 border-l-2 border-cyan-400/40 pl-4">
+                    <p className="text-sm font-medium text-slate-300">
+                      {edu.exchange.label} · {edu.exchange.institution}
+                    </p>
+                    <p className="text-sm text-slate-500">GPA {edu.exchange.gpa}</p>
+                  </div>
+                )}
+              </div>
+            </TiltCard>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  </section>
+);
 
 export default Education;

@@ -8,7 +8,24 @@ export const HERO_CONTENT = {
     secondary: { text: "Visit Cogentic", href: "https://cogentichq.com/" },
     tertiary: { text: "Get in Touch", href: "#contact" },
   },
+  rotatingRoles: ["ML systems", "data platforms", "AI agents", "distributed systems"],
+  highlights: ["Georgia Tech MSCS", "3 Patents Pending", "Co-Founder @ Cogentic"],
 };
+
+export const IMPACT_STATS = [
+  { value: 3, prefix: "$", suffix: "M+", label: "Annual savings", detail: "Bayesian NN systems in production at Pratt & Whitney" },
+  { value: 38.2, suffix: "%", label: "MAE improvement", detail: "Over Pratt & Whitney's best internal model" },
+  { value: 25, suffix: "%", label: "Lower prediction error", detail: "Cogentic deployment in aerospace manufacturing" },
+  { value: 500, suffix: "K+", label: "Telemetry points / hour", detail: "Ingested through OPC-UA event-driven pipelines" },
+  { value: 2, suffix: "M+", label: "Records / day", detail: "Processed by production ETL pipelines" },
+  { value: 3, suffix: "", label: "Patents pending", detail: "Bayesian Monte Carlo, digital twins, 3D visualization" },
+];
+
+export const MARQUEE_TECH = [
+  "Python", "TypeScript", "React", "FastAPI", "Claude API", "MCP", "AutoGluon", "XGBoost",
+  "LightGBM", "Kafka", "PostgreSQL", "Redis", "Docker", "Kubernetes", "Terraform", "AWS",
+  "GCP", "OPC-UA", "DuckDB", "GitHub Actions", "C++", "Go",
+];
 
 export const AEROML = {
   title: "AeroML",
@@ -108,11 +125,11 @@ export const PROJECTS = [
   },
   {
     title: "Cogentic",
-    type: "AI Agent Infrastructure & Integrations",
+    type: "Data Engineering & ML for Manufacturing",
     description:
-      "Founded and lead an AI implementation company delivering autonomous agents and integrations for legal, fintech, and manufacturing clients.",
-    technologies: ["AI Agents", "Claude API", "AWS", "Python", "Terraform"],
-    metric: "Multi-Industry Deployments",
+      "Co-founded an AI startup whose full-stack platform centralizes fragmented production data and automates ML workflows for industrial manufacturing. Deployed in aerospace manufacturing, reducing prediction error by 25%.",
+    technologies: ["Python", "FastAPI", "React", "TypeScript", "Docker", "AutoML"],
+    metric: "25% Lower Prediction Error",
     href: "https://cogentichq.com/",
     featured: true,
   },
@@ -134,7 +151,7 @@ export const PROJECTS = [
       "Desktop app that transforms screenshots of math problems into animated video explanations using Manim and AI. Reached 12k users in 3 months.",
     technologies: ["Electron", "Python", "Manim", "OpenAI API", "AWS"],
     metric: "12k Users in 3 Months",
-    href: "https://almentor.co",
+    href: "https://trydataground.com",
     github: "https://github.com/Aymane-Arfaoui/Almentor",
     featured: false,
   },
@@ -143,23 +160,23 @@ export const PROJECTS = [
 export const EXPERIENCES = [
   {
     period: "03/2026 – Present",
-    role: "CEO & Founder",
+    role: "Co-Founder & CEO",
     company: "Cogentic",
     location: "Montreal, QC",
     description:
-      "Founded and lead an AI implementation company delivering autonomous AI agents and integrations for legal, fintech, and manufacturing clients. Architected agent pipelines, managed client engagements, and shipped production deployments across multiple verticals.",
-    technologies: ["AI Agents", "Claude API", "Python", "AWS", "Terraform", "Docker"],
-    impact: "Multi-Vertical AI Deployments",
+      "Co-founded an AI startup building data engineering and machine learning solutions for industrial manufacturing. Lead technical development of a full-stack platform that centralizes fragmented production data, automates ML workflows, and helps engineers optimize manufacturing processes. Deployed in an aerospace manufacturing environment, reducing prediction error by 25%.",
+    technologies: ["Python", "FastAPI", "React", "TypeScript", "Docker", "AutoML"],
+    impact: "25% Lower Prediction Error",
     href: "https://cogentichq.com/",
   },
   {
-    period: "04/2026 – Present",
-    role: "AI Engineer / Software Engineer",
+    period: "04/2026 – 07/2026",
+    role: "AI / Software Engineer",
     company: "Lexsy AI",
     location: "Remote",
     description:
-      "Deployed AI agents on AWS EC2, integrated Claude API for real-time inference, and built voice and screen-sharing workflows for autonomous agent interactions. Engineered low-latency pipelines and production monitoring dashboards.",
-    technologies: ["Claude API", "AWS EC2", "Python", "Docker", "WebRTC"],
+      "Developed autonomous AI agents and cloud infrastructure for legal-tech applications. Built Python agents powered by Claude, integrated third-party APIs through MCP, and developed multimodal capabilities with real-time voice and screen sharing. Deployed and optimized AI services on AWS with Docker, improving inference efficiency through caching, model routing, and context optimization.",
+    technologies: ["Python", "Claude API", "MCP", "AWS", "Docker"],
     impact: "Production Agent Deployment",
   },
   {

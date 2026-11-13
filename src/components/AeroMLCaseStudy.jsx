@@ -1,294 +1,202 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import React, { Suspense, lazy, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { AEROML } from '../constants';
-import capstoneTeam from '../assets/CapstoneTeam.jpg';
+import capstoneTeam from '../assets/CapstoneTeam-web.jpg';
+import {
+  CountUp,
+  EASE,
+  GhostButton,
+  PrimaryButton,
+  SectionHeader,
+  SplitReveal,
+  TiltCard,
+  fadeUp,
+  stagger,
+} from './ui/motion';
 
-/* ─── Helpers ─── */
+const MedallionScene = lazy(() => import('./three/MedallionScene'));
 
-const fadeUp = {
-  hidden: { y: 30, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-};
-
-const stagger = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
-
-function CountUp({ target, suffix = '', duration = 2000 }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-50px' });
-  const [value, setValue] = useState('0');
-
-  useEffect(() => {
-    if (!inView) return;
-    const num = parseFloat(target);
-    if (isNaN(num)) {
-      setValue(target);
-      return;
-    }
-    const start = performance.now();
-    const step = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = eased * num;
-      setValue(Number.isInteger(num) ? Math.round(current).toString() : current.toFixed(1));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [inView, target, duration]);
-
-  return <span ref={ref}>{value}{suffix}</span>;
-}
-
-/* ─── Sub-sections ─── */
-
-function SectionHeading({ label, title }) {
+function SubHeading({ label, title }) {
   return (
-    <motion.div
-      className="text-center mb-12"
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-    >
-      {label && (
-        <span className="text-sm font-mono text-cyan-400 tracking-wider uppercase mb-2 block">
-          {label}
-        </span>
-      )}
-      <h3 className="text-3xl lg:text-4xl font-bold">{title}</h3>
-    </motion.div>
+    <div className="mb-10">
+      <span className="mb-3 block font-mono text-xs uppercase tracking-[0.25em] text-cyan-400">{label}</span>
+      <h3 className="font-display text-3xl lg:text-5xl font-bold tracking-tight">
+        <SplitReveal text={title} />
+      </h3>
+    </div>
   );
 }
 
 function MetricCard({ metric }) {
-  const isNumeric = /^[\d.]+/.test(metric.value);
-  const numericPart = isNumeric ? parseFloat(metric.value) : null;
-  const suffixPart = isNumeric ? metric.value.replace(/[\d.]+/, '') : '';
-
+  const match = metric.value.match(/^([\d.]+)(.*)$/);
   return (
-    <motion.div
-      variants={fadeUp}
-      whileHover={{ scale: 1.04, borderColor: 'rgba(6,182,212,0.3)' }}
-      className="glass-dark rounded-2xl p-6 text-center border border-white/5 transition-colors group"
-    >
-      <div className="text-3xl lg:text-4xl font-bold gradient-text-cyan mb-1">
-        {numericPart !== null ? (
-          <CountUp target={numericPart.toString()} suffix={suffixPart} />
-        ) : (
-          metric.value
-        )}
-      </div>
-      <div className="text-sm font-semibold text-slate-200 mb-1">{metric.label}</div>
-      <div className="text-xs text-slate-500">{metric.detail}</div>
+    <motion.div variants={fadeUp}>
+      <TiltCard className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-6">
+        <div style={{ transform: 'translateZ(30px)' }}>
+          <div className="font-display text-4xl lg:text-5xl font-bold tracking-tight gradient-text-cyan">
+            {match ? <CountUp value={parseFloat(match[1])} suffix={match[2]} /> : metric.value}
+          </div>
+          <div className="mt-2 text-sm font-semibold text-slate-100">{metric.label}</div>
+          <div className="text-xs text-slate-500">{metric.detail}</div>
+        </div>
+      </TiltCard>
     </motion.div>
   );
 }
 
-function HeroBanner() {
+function Intro() {
   return (
-    <div className="flex flex-col lg:flex-row gap-12 items-center mb-24">
-      {/* Left */}
-      <motion.div
-        className="lg:w-1/2"
-        variants={stagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        <motion.span
-          variants={fadeUp}
-          className="inline-block text-sm font-mono text-cyan-400 tracking-wider mb-4"
-        >
-          Featured Case Study
-        </motion.span>
-        <motion.h2
-          variants={fadeUp}
-          className="text-5xl lg:text-6xl font-bold mb-3"
-        >
-          <span className="gradient-text">AeroML</span>
-        </motion.h2>
-        <motion.p
-          variants={fadeUp}
-          className="text-xl text-slate-400 mb-6"
-        >
+    <div className="mb-32 grid items-center gap-14 lg:grid-cols-2">
+      <motion.div variants={stagger(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        <motion.p variants={fadeUp} className="mb-6 font-display text-2xl text-slate-200">
           {AEROML.subtitle}
         </motion.p>
-        <motion.p
-          variants={fadeUp}
-          className="text-slate-400 leading-relaxed mb-8"
-        >
+        <motion.p variants={fadeUp} className="mb-10 leading-relaxed text-slate-400">
           {AEROML.summary}
         </motion.p>
-        <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
-          <a
-            href={AEROML.links.presentation}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:-translate-y-0.5"
-          >
-            Watch Presentation
-          </a>
-          <a
-            href={AEROML.links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 border border-slate-700 text-slate-300 rounded-xl font-semibold hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300"
-          >
-            View GitHub
-          </a>
-          <a
-            href={AEROML.links.contact}
-            className="px-6 py-3 border border-slate-700 text-slate-300 rounded-xl font-semibold hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300"
-          >
-            Contact Me
-          </a>
+        <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
+          <PrimaryButton href={AEROML.links.presentation} external>Watch presentation</PrimaryButton>
+          <GhostButton href={AEROML.links.github} external>GitHub ↗</GhostButton>
         </motion.div>
       </motion.div>
-
-      {/* Right — Metric cards */}
       <motion.div
-        className="lg:w-1/2 grid grid-cols-2 gap-4"
-        variants={stagger}
+        className="grid grid-cols-2 gap-4"
+        variants={stagger(0.1)}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
       >
-        {AEROML.metrics.map((m, i) => (
-          <MetricCard key={i} metric={m} />
+        {AEROML.metrics.map((m) => (
+          <MetricCard key={m.label} metric={m} />
         ))}
       </motion.div>
     </div>
   );
 }
 
-function VideoSection() {
-  const videoId = '1AyQwt_PZ091EtPpPlzbzziFQuU69pJsA';
-  const embedUrl = `https://drive.google.com/file/d/${videoId}/preview`;
+function VideoReveal() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] });
+  const rotateX = useTransform(scrollYProgress, [0, 1], [28, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.82, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [0.2, 1]);
 
   return (
-    <div className="mb-24">
-      <SectionHeading label="Demo" title="Watch the Presentation" />
+    <div ref={ref} className="mb-32" style={{ perspective: 1400 }}>
       <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="max-w-4xl mx-auto"
+        style={{ rotateX, scale, opacity }}
+        className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-navy-800 shadow-[0_40px_120px_-20px_rgba(34,211,238,0.25)]"
       >
-        <div className="relative rounded-2xl overflow-hidden border border-white/[0.06] shadow-2xl shadow-black/30">
-          <div className="aspect-video">
-            <iframe
-              src={embedUrl}
-              title="AeroML Presentation"
-              className="w-full h-full"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            />
-          </div>
+        <div className="flex items-center gap-2 border-b border-white/5 bg-white/[0.04] px-4 py-3">
+          <span className="h-3 w-3 rounded-full bg-red-500/70" />
+          <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
+          <span className="h-3 w-3 rounded-full bg-green-500/70" />
+          <span className="ml-4 rounded-md bg-white/5 px-3 py-1 font-mono text-[11px] text-slate-400">
+            aeroml — demo & architecture walkthrough
+          </span>
         </div>
-        <p className="text-center text-sm text-slate-500 mt-4">
-          Full AeroML platform demo and architecture walkthrough
-        </p>
+        <div className="aspect-video">
+          <iframe
+            src="https://drive.google.com/file/d/1AyQwt_PZ091EtPpPlzbzziFQuU69pJsA/preview"
+            title="AeroML presentation"
+            className="h-full w-full"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            loading="lazy"
+          />
+        </div>
       </motion.div>
     </div>
   );
 }
 
 function ProblemSolution() {
+  const cards = [
+    { title: 'The problem', body: AEROML.problem, accent: 'from-orange-500 to-rose-500', tag: '01' },
+    { title: 'The solution', body: AEROML.solution, accent: 'from-cyan-400 to-violet-500', tag: '02' },
+  ];
   return (
     <motion.div
-      className="grid md:grid-cols-2 gap-6 mb-24"
-      variants={stagger}
+      className="mb-32 grid gap-6 md:grid-cols-2"
+      variants={stagger(0.15)}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
-      <motion.div
-        variants={fadeUp}
-        className="glass-dark rounded-2xl p-8 border-l-4 border-orange-500/60"
-      >
-        <h4 className="text-lg font-bold text-orange-400 mb-3">The Problem</h4>
-        <p className="text-slate-400 leading-relaxed">{AEROML.problem}</p>
-      </motion.div>
-      <motion.div
-        variants={fadeUp}
-        className="glass-dark rounded-2xl p-8 border-l-4 border-cyan-500/60"
-      >
-        <h4 className="text-lg font-bold text-cyan-400 mb-3">The Solution</h4>
-        <p className="text-slate-400 leading-relaxed">{AEROML.solution}</p>
-      </motion.div>
+      {cards.map((c) => (
+        <motion.div key={c.title} variants={fadeUp}>
+          <TiltCard intensity={6} className="overflow-hidden rounded-3xl border border-white/[0.07] bg-white/[0.02] p-10">
+            <div className={`absolute left-0 top-0 h-1 w-full bg-gradient-to-r ${c.accent}`} />
+            <span className="font-mono text-xs text-slate-500">{c.tag}</span>
+            <h4 className="mb-4 mt-2 font-display text-3xl font-bold text-slate-100">{c.title}</h4>
+            <p className="leading-relaxed text-slate-400">{c.body}</p>
+          </TiltCard>
+        </motion.div>
+      ))}
     </motion.div>
   );
 }
 
+const stageColors = ['text-amber-500', 'text-slate-300', 'text-yellow-400'];
+
 function Architecture() {
   return (
-    <div className="mb-24">
-      <SectionHeading label="Data Pipeline" title="Medallion Architecture" />
-      <motion.div
-        className="grid md:grid-cols-3 gap-6 relative"
-        variants={stagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        {AEROML.architecture.map((stage, i) => (
-          <motion.div
-            key={stage.stage}
-            variants={fadeUp}
-            whileHover={{ scale: 1.03 }}
-            className="relative glass-dark rounded-2xl p-8 border border-white/5 overflow-hidden"
-          >
-            <div
-              className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${stage.color}`}
-            />
-            <div className="text-xs font-mono text-slate-500 uppercase tracking-wider mb-2">
-              Stage {i + 1}
-            </div>
-            <h4 className="text-xl font-bold mb-1">{stage.stage}</h4>
-            <p className="text-sm text-cyan-400 font-medium mb-3">{stage.title}</p>
-            <p className="text-sm text-slate-400 leading-relaxed">{stage.description}</p>
-            {i < 2 && (
-              <div className="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 text-slate-600 text-xl z-10">
-                →
+    <div className="mb-32 grid items-center gap-12 lg:grid-cols-2">
+      <div className="relative order-2 aspect-square w-full lg:order-1">
+        <div className="absolute inset-[15%] rounded-full bg-cyan-500/10 blur-[80px]" />
+        <Suspense fallback={null}>
+          <MedallionScene className="absolute inset-0" />
+        </Suspense>
+      </div>
+      <div className="order-1 lg:order-2">
+        <SubHeading label="Data pipeline" title="Medallion architecture" />
+        <div className="space-y-4">
+          {[...AEROML.architecture].reverse().map((stage, i) => (
+            <motion.div
+              key={stage.stage}
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: EASE, delay: i * 0.12 }}
+              className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6 transition-colors hover:border-white/20"
+            >
+              <div className={`absolute left-0 top-0 h-full w-1 bg-gradient-to-b ${stage.color}`} />
+              <div className="flex items-baseline gap-3">
+                <span className={`font-display text-xl font-bold ${stageColors[2 - i]}`}>{stage.stage}</span>
+                <span className="text-sm text-slate-400">· {stage.title}</span>
               </div>
-            )}
-          </motion.div>
-        ))}
-      </motion.div>
+              <p className="mt-2 text-sm leading-relaxed text-slate-400">{stage.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-const featureIcons = [
-  '↑', '◉', '✦', '◎', '▤', '⚡', '◆', '▸', '⬡',
-];
-
 function Features() {
   return (
-    <div className="mb-24">
-      <SectionHeading label="Platform Capabilities" title="What I Built" />
+    <div className="mb-32">
+      <SubHeading label="Platform capabilities" title="What I built" />
       <motion.div
-        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
-        variants={stagger}
+        className="grid gap-px overflow-hidden rounded-3xl border border-white/[0.07] bg-white/[0.07] sm:grid-cols-2 lg:grid-cols-3"
+        variants={stagger(0.05)}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
       >
         {AEROML.features.map((f, i) => (
           <motion.div
-            key={i}
+            key={f.title}
             variants={fadeUp}
-            whileHover={{ scale: 1.03, borderColor: 'rgba(6,182,212,0.2)' }}
-            className="glass-dark rounded-xl p-6 border border-white/5 transition-colors group"
+            className="group relative bg-navy-950 p-8 transition-colors duration-500 hover:bg-navy-800"
           >
-            <span className="text-cyan-400 text-lg mb-3 block opacity-60 group-hover:opacity-100 transition-opacity">
-              {featureIcons[i]}
+            <span className="font-mono text-xs text-slate-600 transition-colors group-hover:text-cyan-400">
+              {String(i + 1).padStart(2, '0')}
             </span>
-            <h5 className="font-semibold text-slate-200 mb-1">{f.title}</h5>
-            <p className="text-sm text-slate-500 leading-relaxed">{f.description}</p>
+            <h5 className="mb-2 mt-4 font-display text-lg font-semibold text-slate-100">{f.title}</h5>
+            <p className="text-sm leading-relaxed text-slate-500">{f.description}</p>
+            <span className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 group-hover:w-full" />
           </motion.div>
         ))}
       </motion.div>
@@ -296,125 +204,104 @@ function Features() {
   );
 }
 
-function RoleSection() {
+function Role() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const imgY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
+
   return (
-    <motion.div
-      className="mb-24"
-      variants={stagger}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-    >
-      <SectionHeading label="Leadership" title="My Role" />
-      <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-        {/* Team photo */}
-        <motion.div variants={fadeUp} className="relative rounded-2xl overflow-hidden border border-white/[0.06] shadow-2xl shadow-black/30 group">
-          <img
-            src={capstoneTeam}
-            alt="AeroML capstone team at the project showcase"
-            className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-900/60 via-transparent to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4">
-            <p className="text-sm text-slate-300 font-medium">The AeroML team at the Concordia Capstone Showcase</p>
-          </div>
-        </motion.div>
-        {/* Role description */}
-        <motion.div variants={fadeUp} className="glass-dark rounded-2xl p-8 border border-white/5">
-          <p className="text-slate-400 leading-relaxed">{AEROML.role}</p>
+    <div ref={ref} className="mb-32 grid items-center gap-12 lg:grid-cols-2">
+      <motion.div
+        initial={{ clipPath: 'inset(0 100% 0 0)' }}
+        whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.3, ease: EASE }}
+        className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10"
+      >
+        <motion.img
+          src={capstoneTeam}
+          alt="The AeroML team at the Concordia Capstone Showcase"
+          style={{ y: imgY }}
+          className="absolute inset-0 h-[120%] w-full -top-[10%] object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-transparent" />
+        <p className="absolute bottom-5 left-6 font-mono text-xs uppercase tracking-wider text-slate-300">
+          AeroML team · Concordia Capstone Showcase
+        </p>
+      </motion.div>
+      <div>
+        <SubHeading label="Leadership" title="My role" />
+        <motion.p
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="text-lg leading-relaxed text-slate-400"
+        >
+          {AEROML.role}
+        </motion.p>
+        <motion.div
+          className="mt-8 flex flex-wrap gap-2"
+          variants={stagger(0.03)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {AEROML.techStack.map((t) => (
+            <motion.span
+              key={t}
+              variants={fadeUp}
+              className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-xs text-slate-300 transition-colors hover:border-cyan-400/50 hover:text-cyan-300"
+            >
+              {t}
+            </motion.span>
+          ))}
         </motion.div>
       </div>
-    </motion.div>
-  );
-}
-
-function TechStack() {
-  return (
-    <div className="mb-24">
-      <SectionHeading label="Built With" title="Tech Stack" />
-      <motion.div
-        className="flex flex-wrap justify-center gap-3"
-        variants={stagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        {AEROML.techStack.map((tech) => (
-          <motion.span
-            key={tech}
-            variants={fadeUp}
-            whileHover={{ scale: 1.08 }}
-            className="px-4 py-2 glass-dark rounded-lg text-sm font-mono text-slate-300 border border-white/5 hover:border-cyan-500/30 hover:text-cyan-400 transition-colors cursor-default"
-          >
-            {tech}
-          </motion.span>
-        ))}
-      </motion.div>
     </div>
   );
 }
 
-function ImpactSection() {
+function ImpactBanner() {
   return (
     <motion.div
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
+      className="gradient-border relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-cyan-500/[0.08] via-transparent to-violet-500/[0.08] p-10 lg:p-16"
     >
-      <SectionHeading label="Results" title="Impact" />
-      <div className="glass-dark rounded-2xl p-8 lg:p-12 border border-white/5 gradient-border max-w-4xl mx-auto text-center">
-        <div className="text-4xl lg:text-5xl font-bold gradient-text-cyan mb-6">
-          {AEROML.impact.headline}
-        </div>
-        <ul className="space-y-3">
-          {AEROML.impact.points.map((point, i) => (
-            <li
-              key={i}
-              className="text-slate-400 flex items-start justify-center gap-2"
-            >
-              <span className="text-cyan-500 mt-1">&#9656;</span>
-              {point}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-cyan-500/20 blur-[120px]" />
+      <span className="font-mono text-xs uppercase tracking-[0.25em] text-cyan-400">Results</span>
+      <h3 className="mt-4 max-w-4xl font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-6xl">
+        <SplitReveal text={AEROML.impact.headline} wordClassName="gradient-text" />
+      </h3>
+      <ul className="mt-10 grid gap-4 sm:grid-cols-2">
+        {AEROML.impact.points.map((p) => (
+          <li key={p} className="flex items-start gap-3 text-slate-300">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
+            {p}
+          </li>
+        ))}
+      </ul>
     </motion.div>
   );
 }
 
-/* ─── Main ─── */
-
-const AeroMLCaseStudy = () => {
-  return (
-    <section id="aeroml" className="relative py-24 overflow-hidden">
-      {/* Background accent */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
-        <motion.div
-          className="absolute top-40 -right-60 w-[600px] h-[600px] rounded-full bg-cyan-600/[0.04] blur-[120px]"
-          animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-40 -left-40 w-[400px] h-[400px] rounded-full bg-blue-600/[0.04] blur-[100px]"
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <HeroBanner />
-        <VideoSection />
-        <ProblemSolution />
-        <Architecture />
-        <Features />
-        <RoleSection />
-        <TechStack />
-        <ImpactSection />
-      </div>
-    </section>
-  );
-};
+const AeroMLCaseStudy = () => (
+  <section id="aeroml" className="relative py-32">
+    <div className="pointer-events-none absolute left-1/2 top-40 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-cyan-600/[0.06] blur-[140px]" />
+    <div className="relative mx-auto max-w-7xl px-6">
+      <SectionHeader index="02" label="Featured case study" title="AeroML." accent="Weeks to minutes." />
+      <Intro />
+      <VideoReveal />
+      <ProblemSolution />
+      <Architecture />
+      <Features />
+      <Role />
+      <ImpactBanner />
+    </div>
+  </section>
+);
 
 export default AeroMLCaseStudy;

@@ -1,95 +1,66 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PATENTS, LEADERSHIP } from '../constants';
+import { EASE, SectionHeader, fadeUp, stagger } from './ui/motion';
 
-const fadeUp = {
-  hidden: { y: 30, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-};
-
-const stagger = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
-
-function PatentCard({ patent }) {
+function PatentRow({ patent, index }) {
   return (
     <motion.div
-      variants={fadeUp}
-      whileHover={{ scale: 1.03, borderColor: 'rgba(6,182,212,0.2)' }}
-      className="glass-dark rounded-2xl p-6 border border-white/5 transition-colors"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.8, ease: EASE, delay: index * 0.08 }}
+      className="group relative grid gap-4 overflow-hidden border-t border-white/10 py-10 md:grid-cols-[80px_1fr_1fr] md:items-center"
     >
-      <span className="inline-block text-[10px] font-mono uppercase tracking-widest text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full mb-3">
-        {patent.status}
+      <span className="absolute inset-0 origin-bottom scale-y-0 bg-gradient-to-r from-cyan-500/[0.07] to-violet-500/[0.07] transition-transform duration-500 ease-out group-hover:scale-y-100" />
+      <span className="relative font-mono text-sm text-slate-500 transition-colors group-hover:text-cyan-400">
+        {String(index + 1).padStart(2, '0')}
       </span>
-      <h4 className="text-base font-bold text-slate-100 mb-2">{patent.title}</h4>
-      <p className="text-sm text-slate-400 leading-relaxed">{patent.description}</p>
-    </motion.div>
-  );
-}
-
-function LeadershipCard({ item }) {
-  return (
-    <motion.div
-      variants={fadeUp}
-      whileHover={{ scale: 1.03, borderColor: 'rgba(6,182,212,0.2)' }}
-      className="glass-dark rounded-2xl p-6 border border-white/5 transition-colors"
-    >
-      <h4 className="text-base font-bold text-slate-100 mb-1">{item.role}</h4>
-      <p className="text-sm text-cyan-400 font-medium mb-2">{item.organization}</p>
-      <p className="text-sm text-slate-400 leading-relaxed">{item.description}</p>
-    </motion.div>
-  );
-}
-
-const PatentsLeadership = () => {
-  return (
-    <section className="relative py-24">
-      <div className="absolute top-0 left-0 right-0 section-divider" />
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Patents */}
-        <motion.div
-          className="text-center mb-14"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <span className="text-sm font-mono text-cyan-400 tracking-wider uppercase block mb-2">
-            Innovation
-          </span>
-          <h2 className="text-4xl lg:text-5xl font-bold">
-            <span className="gradient-text">Patents & Leadership</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          className="grid md:grid-cols-3 gap-6 mb-16"
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {PATENTS.map((patent, i) => (
-            <PatentCard key={i} patent={patent} />
-          ))}
-        </motion.div>
-
-        {/* Leadership */}
-        <motion.div
-          className="grid md:grid-cols-2 gap-6"
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {LEADERSHIP.map((item, i) => (
-            <LeadershipCard key={i} item={item} />
-          ))}
-        </motion.div>
+      <h3 className="relative font-display text-2xl lg:text-3xl font-bold tracking-tight text-slate-100 transition-transform duration-500 group-hover:translate-x-3">
+        {patent.title}
+      </h3>
+      <div className="relative">
+        <span className="mb-2 inline-block rounded-full bg-amber-400/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-amber-300">
+          {patent.status}
+        </span>
+        <p className="text-sm leading-relaxed text-slate-400">{patent.description}</p>
       </div>
-    </section>
+    </motion.div>
   );
-};
+}
+
+const PatentsLeadership = () => (
+  <section id="patents" className="relative py-32">
+    <div className="mx-auto max-w-7xl px-6">
+      <SectionHeader index="07" label="Innovation" title="Patents &" accent="leadership." />
+
+      <div className="border-b border-white/10">
+        {PATENTS.map((p, i) => (
+          <PatentRow key={p.title} patent={p} index={i} />
+        ))}
+      </div>
+
+      <motion.div
+        className="mt-16 grid gap-6 md:grid-cols-2"
+        variants={stagger(0.12)}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {LEADERSHIP.map((item) => (
+          <motion.div
+            key={item.role}
+            variants={fadeUp}
+            className="rounded-3xl border border-white/[0.07] bg-white/[0.02] p-8 transition-colors hover:border-white/20"
+          >
+            <span className="font-mono text-xs uppercase tracking-wider text-cyan-400">{item.organization}</span>
+            <h4 className="mt-3 font-display text-2xl font-bold text-slate-100">{item.role}</h4>
+            <p className="mt-3 text-sm leading-relaxed text-slate-400">{item.description}</p>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  </section>
+);
 
 export default PatentsLeadership;
